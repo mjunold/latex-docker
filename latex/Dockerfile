@@ -1,9 +1,4 @@
-FROM debian:testing
-
-ARG USER_NAME=latex
-ARG USER_HOME=/home/latex
-ARG USER_ID=1000
-ARG USER_GECOS=LaTeX
+FROM ubuntu:latest
 
 ARG WGET=wget
 ARG GIT=git
@@ -14,8 +9,9 @@ ARG PYGMENTS=python3-pygments
 ARG PYTHONIS=python-is-python3
 ARG FIG2DEV=fig2dev
 ARG JRE=default-jre-headless
+ARG FONTS=cm-super
 
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y apt-utils && apt -y upgrade && apt install -y \
   texlive-full \
   # some auxiliary tools
   "$WGET" \
@@ -32,17 +28,10 @@ RUN apt-get update && apt-get install -y \
   "$PYTHONIS" \
   # Java runtime environment (e.g. for arara)
   "$JRE" \
-  # will be used to add a user
-  adduser && \
+  # additional latex fonts
+  "$FONTS" && \
   # Removing documentation packages *after* installing them is kind of hacky,
   # but it only adds some overhead while building the image.
-  apt-get --purge remove -y .\*-doc$ && \
+  apt --purge remove -y .\*-doc$ && \
   # Remove more unnecessary stuff
-  apt-get clean -y
-
-RUN adduser \
-  --home "$USER_HOME" \
-  --uid $USER_ID \
-  --gecos "$USER_GECOS" \
-  --disabled-password \
-  "$USER_NAME"
+  apt clean -y
