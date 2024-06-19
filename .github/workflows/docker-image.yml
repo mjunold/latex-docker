@@ -17,7 +17,7 @@ on:
   release:
     types: [published]
 
-workflow_dispatch:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
