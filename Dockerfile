@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:trixie-slim
 
 ARG WGET=wget
 ARG GIT=git
